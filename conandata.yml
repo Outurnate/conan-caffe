@@ -1,7 +1,7 @@
 sources:
   "1.0":
-    url: "https://github.com/BVLC/caffe/archive/1.0.tar.gz"
-    sha256: "71d3c9eb8a183150f965a465824d01fe82826c22505f7aa314f700ace03fa77f"
+    url: "https://github.com/BVLC/caffe/archive/3f2b97e93ed5ab612b6d00995294e37a422f0931.tar.gz"
+    sha256: "91eb6cdf2bce07c83ffef0e6948d19da50a109a2ccd22aa99e66b64b684a8a22"
 patches:
   "1.0":
     - base_path: "source_subfolder"
@@ -21,4 +21,4 @@ patches:
     - base_path: "source_subfolder"
       patch_file: "patches/1.0/0008-cmake-protobuf-case.patch"
     - base_path: "source_subfolder"
-      patch_file: "patches/1.0/0009-empty-defs.patch"
+      patch_file: "patches/1.0/0009-python_layer.patch"

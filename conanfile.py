@@ -1,7 +1,7 @@
 from conans import ConanFile, CMake, tools
 from conans.errors import ConanInvalidConfiguration
 import os
-
+import sys
 
 class CaffeConan(ConanFile):
     name = "caffe"
@@ -17,27 +17,13 @@ class CaffeConan(ConanFile):
 
     options = {"shared": [True, False],
                "fPIC": [True, False],
-               "with_gpu": [True, False],
-               "with_cudnn": [True, False],
-               "with_opencv": [True, False],
                "with_leveldb": [True, False],
-               "with_lmdb": [True, False],
-               "gpu_arch": ["Fermi", "Kepler", "Maxwell", "Pascal", "All", "Manual"],
-               # following options are valid when gpu_arch=Manual
-               "gpu_arch_bin": "ANY",
-               "gpu_arch_ptx": "ANY"
+               "with_lmdb": [True, False]
                }
-    default_options = {"shared": False,
+    default_options = {"shared": True,
                        "fPIC": True,
-                       "with_gpu": False,
-                       "with_cudnn": False,
-                       "with_opencv": False,
                        "with_leveldb": False,
-                       "with_lmdb": False,
-                       # this default ensures build with modern CUDA that omit Fermi
-                       "gpu_arch": "Kepler",
-                       "gpu_arch_bin": "",
-                       "gpu_arch_ptx": ""
+                       "with_lmdb": False
                        }
 
     _source_subfolder = "source_subfolder"
@@ -47,8 +33,6 @@ class CaffeConan(ConanFile):
     def configure(self):
         if self.settings.os == "Windows":
             raise ConanInvalidConfiguration("This library is not compatible with Windows")
-        if not self.options.with_gpu:
-            del self.options.gpu_arch
 
     def requirements(self):
         self.requires("boost/1.72.0")
@@ -60,9 +44,7 @@ class CaffeConan(ConanFile):
         if self.settings.os != "Macos":
             self.requires("openblas/0.3.10")
         self.requires("protobuf/3.9.1")
-        if self.options.with_opencv:
-            self.output.warn("OpenCV may require different protobuf than Caffe")
-            self.requires("opencv/4.1.1@conan/stable")
+        self.requires("opencv/4.1.1@conan/stable")
 
 
     def build_requirements(self):
@@ -71,7 +53,7 @@ class CaffeConan(ConanFile):
 
     def source(self):
         tools.get(**self.conan_data["sources"][self.version])
-        extracted_dir = self.name + "-" + self.version
+        extracted_dir = self.name + "-3f2b97e93ed5ab612b6d00995294e37a422f0931"
         os.rename(extracted_dir, self._source_subfolder)
 
     def _configure_cmake(self):
@@ -79,20 +61,14 @@ class CaffeConan(ConanFile):
         cmake.definitions["BUILD_python"] = False
         cmake.definitions["BUILD_python_layer"] = False
         cmake.definitions["BUILD_docs"] = False
+        cmake.definitions["CPU_ONLY"] = False
+        cmake.definitions["USE_OPENCV"] = False
 
-        cmake.definitions["CPU_ONLY"] = not self.options.with_gpu
-        cmake.definitions["USE_OPENCV"] = self.options.with_opencv
         cmake.definitions["USE_LEVELDB"] = self.options.with_leveldb
         cmake.definitions["USE_LMDB"] = self.options.with_lmdb
-        cmake.definitions["USE_CUDNN"] = self.options.with_cudnn
         cmake.definitions["PROTOBUF_PROTOC_EXECUTABLE"] = os.path.join(self.deps_cpp_info['protobuf'].rootpath, 'bin', 'protoc')
 
-        if self.options.with_gpu:
-            cmake.definitions["CUDA_ARCH_NAME"] = self.options.gpu_arch
-            if self.options.gpu_arch == "Manual":
-                cmake.definitions["CUDA_ARCH_BIN"] = self.options.gpu_arch_bin
-                cmake.definitions["CUDA_ARCH_PTX"] = self.options.gpu_arch_ptx
-            cmake.definitions["CUDA_NVCC_FLAGS"] = '-std=c++11'
+        cmake.definitions["PYTHON_EXECUTABLE"] = sys.executable
 
         if self.settings.os == "Linux":
             cmake.definitions["BLAS"] = "open"
@@ -129,23 +105,17 @@ class CaffeConan(ConanFile):
 
     def package_info(self):
         if self.settings.build_type == "Debug":
-            self.cpp_info.libs = ["caffe-d", "proto-d"]
+            self.cpp_info.libs = ["caffe-d"]
         else:
-            self.cpp_info.libs = ["caffe", "proto"]
+            self.cpp_info.libs = ["caffe"]
         if self.settings.os == "Linux":
             self.cpp_info.system_libs = ["m"]
 
         # pass options from Caffe_DEFINITIONS
-        if not self.options.with_gpu:
-            self.cpp_info.defines.append("CPU_ONLY")
-        if self.options.with_opencv:
-            self.cpp_info.defines.append("USE_OPENCV")
         if self.options.with_leveldb:
             self.cpp_info.defines.append("USE_LEVELDB")
         if self.options.with_lmdb:
             self.cpp_info.defines.append("USE_LMDB")
-        if self.options.with_cudnn:
-            self.cpp_info.defines.append("USE_CUDNN")
         if self.settings.os == "Macos":
             # not for all cases but usually works
             self.cpp_info.defines.append("USE_ACCELERATE")

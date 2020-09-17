@@ -1,7 +1,7 @@
 diff -ru cmake/Dependencies.cmake cmake-de/Dependencies.cmake
 --- cmake/Dependencies.cmake	2017-04-15 19:17:48.000000000 +0300
 +++ cmake-de/Dependencies.cmake	2020-02-22 14:11:49.000000000 +0300
-@@ -31,13 +31,13 @@
+@@ -36,13 +36,13 @@
  
  # ---[ Google-glog
  include("cmake/External/glog.cmake")

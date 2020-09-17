@@ -1,7 +1,7 @@
 diff -ru cmake/Dependencies.cmake cmake-2/Dependencies.cmake
 --- cmake/Dependencies.cmake	2020-02-22 16:52:32.000000000 +0300
 +++ cmake-2/Dependencies.cmake	2020-02-22 18:36:59.000000000 +0300
-@@ -116,7 +116,7 @@
+@@ -316,7 +316,7 @@
    elseif(BLAS STREQUAL "Open" OR BLAS STREQUAL "open")
      find_package(OpenBLAS REQUIRED)
      list(APPEND Caffe_INCLUDE_DIRS PUBLIC ${OpenBLAS_INCLUDE_DIR})

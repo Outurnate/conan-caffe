@@ -1,0 +1,23 @@
+--- src/caffe/layers/python_layer.cpp	2020-09-15 19:06:01.529188182 -0400
++++ src/caffe/layers/python_layer.cpp.new	2020-09-15 22:23:55.235394123 -0400
+@@ -1,9 +1,9 @@
++#ifdef WITH_PYTHON_LAYER
++
+ #include "caffe/layers/python_layer.hpp"
+ 
+ namespace caffe {
+ 
+-#ifdef WITH_PYTHON_LAYER
+-
+ INSTANTIATE_CLASS_3T_GUARDED(PythonLayer, (half_fp), PROTO_TYPES, PROTO_TYPES);
+ INSTANTIATE_CLASS_3T_GUARDED(PythonLayer, (float), PROTO_TYPES, PROTO_TYPES);
+ INSTANTIATE_CLASS_3T_GUARDED(PythonLayer, (double), PROTO_TYPES, PROTO_TYPES);
+@@ -12,6 +12,6 @@
+ INSTANTIATE_CLASS_3T_GUARDED(PythonLayer, (uint32_t), PROTO_TYPES, PROTO_TYPES);
+ INSTANTIATE_CLASS_3T_GUARDED(PythonLayer, (uint64_t), PROTO_TYPES, PROTO_TYPES);
+ 
+-#endif  // WITH_PYTHON_LAYER
+-
+ }  // namespace caffe
++
++#endif  // WITH_PYTHON_LAYER

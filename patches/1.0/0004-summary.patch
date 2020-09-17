@@ -1,14 +1,22 @@
-diff -ru cmake/Dependencies.cmake cmake-2/Dependencies.cmake
-diff -ru cmake-de/Summary.cmake cmake-2/Summary.cmake
---- cmake/Summary.cmake	2017-04-15 19:17:48.000000000 +0300
-+++ cmake-2/Summary.cmake	2020-02-22 17:19:57.000000000 +0300
-@@ -175,4 +175,9 @@
+--- cmake/Summary.cmake	2020-09-15 19:06:01.385852723 -0400
++++ cmake/Summary.cmake.new	2020-09-15 21:59:44.354876864 -0400
+@@ -111,6 +111,7 @@
+   caffe_status("")
+   caffe_status("  BUILD_SHARED_LIBS :   ${BUILD_SHARED_LIBS}")
+   caffe_status("  BUILD_python      :   ${BUILD_python}")
++  caffe_status("  BUILD_python_layer:   ${BUILD_python_layer}")
+   caffe_status("  BUILD_matlab      :   ${BUILD_matlab}")
+   caffe_status("  BUILD_docs        :   ${BUILD_docs}")
+   caffe_status("  CPU_ONLY          :   ${CPU_ONLY}")
+@@ -178,6 +179,11 @@
    caffe_status("Install:")
    caffe_status("  Install path      :   ${CMAKE_INSTALL_PREFIX}")
    caffe_status("")
-+	caffe_status("Flags:")
-+	caffe_status("  Include dirs      :   ${Caffe_INCLUDE_DIRS}")
-+	caffe_status("  Libs              :   ${Caffe_LINKER_LIBS}")
-+	caffe_status("  Definitions       :   ${Caffe_DEFINITIONS}")
-+	caffe_status("  Conan libs        :   ${CONAN_LIBS}")
- endfunction()
++  caffe_status("Flags:")
++  caffe_status("  Include dirs      :   ${Caffe_INCLUDE_DIRS}")
++  caffe_status("  Libs              :   ${Caffe_LINKER_LIBS}")
++  caffe_status("  Definitions       :   ${Caffe_DEFINITIONS}")
++  caffe_status("  Conan libs        :   ${CONAN_LIBS}")
+   #get_cmake_property(_variableNames VARIABLES)
+   #list (SORT _variableNames)
+   #  foreach (_variableName ${_variableNames})
