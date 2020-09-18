@@ -98,6 +98,7 @@ class CaffeConan(ConanFile):
         self.copy(pattern="LICENSE", dst="licenses", src=self._source_subfolder)
         cmake = self._configure_cmake()
         cmake.install()
+        self.copy("*.hpp",src=os.path.join(self.build_folder, 'build_subfolder/source_subfolder/include/caffe'),dst=os.path.join(self.package_folder, 'include/caffe'))
         # remove python bindings
         tools.rmdir(os.path.join(self.package_folder, 'python'))
         # remove cmake
